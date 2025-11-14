@@ -1,9 +1,0 @@
-<p>
-    <strong>Products:</strong>
-    <span><%= @item.inspect %></span>
-</p>
-
-<footer class="actions">
-    <%= link_to "收藏", "/v1/products/#{@item.id}/collect", method: :post, data: { confirm: "确定收藏?" } %>
-    <%= link_to "取消收藏", "/v1/products/#{@item.id}/uncollect", method: :post, remote: true, data: { confirm: "取消收藏?" } %>
-</footer>
