@@ -15,7 +15,8 @@
       "DOM",
       "DOM.Iterable",
       "ES2015",
-      "ES2015.Promise"
+      "ES2015.Promise",
+      "ES2017"
     ],
     "types": [
       "jest",
@@ -24,6 +25,7 @@
   },
   "include": [
     "src",
+    "__tests__",
     "node_modules/@types",
     "node_modules/@jswork"
   ]
