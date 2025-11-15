@@ -247,4 +247,37 @@ describe('urlLiteral', () => {
       expect(`${url}`).toBe(url.toString());
     });
   });
+
+  describe('value property', () => {
+    test('should return URL string via value property', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+      expect(url.value).toBe('/api/users/123?page=1');
+    });
+
+    test('should work with basic path', () => {
+      const url = urlLiteral`/api/users`;
+      expect(url.value).toBe('/api/users');
+    });
+
+    test('should work with query parameters only', () => {
+      const url = urlLiteral`/api/users`.query({ page: 1, limit: 10 });
+      expect(url.value).toBe('/api/users?page=1&limit=10');
+    });
+
+    test('should work with params only', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 });
+      expect(url.value).toBe('/api/users/123');
+    });
+
+    test('should work with chained params and query', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1, limit: 10 });
+      expect(url.value).toBe('/api/users/123?page=1&limit=10');
+    });
+
+    test('value should be readonly and match toString()', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+      expect(url.value).toBe(url.toString());
+      expect(url.value).toBe('/api/users/123?page=1');
+    });
+  });
 });
