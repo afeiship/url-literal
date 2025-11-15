@@ -112,7 +112,7 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
  * @param values - Interpolated values
  * @returns An object with params(), query() and toString() methods
  */
-const urlLiteral = (strings: TemplateStringsArray, ...values: any[]): UrlLiteralResult => {
+const urlLiteral: UrlLiteralFunction = (strings: TemplateStringsArray, ...values: any[]): UrlLiteralResult => {
   let path = '';
   strings.forEach((str, i) => {
     path += str;
