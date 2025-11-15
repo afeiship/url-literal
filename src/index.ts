@@ -18,13 +18,19 @@ export interface UrlLiteralResult {
    * @returns The base path string
    */
   toString(): string;
+  /**
+   * Converts the object to a primitive value when used in string/number contexts
+   * @param hint - The preferred type of the result ('string', 'number', or 'default')
+   * @returns The complete URL string
+   */
+  [Symbol.toPrimitive](hint: 'string' | 'number' | 'default'): string;
 }
 
 /**
  * Creates a new UrlLiteralResult instance with the given path and optional query parameters
  */
 function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): UrlLiteralResult {
-  return {
+  const result: UrlLiteralResult = {
     params: function(params?: Record<string, any> | null): UrlLiteralResult {
       if (!params || Object.keys(params).length === 0) {
         return createUrlLiteralResult(path, queryParams);
@@ -55,14 +61,20 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
 
       return createUrlLiteralResult(path, searchParams);
     },
-    toString: (): string => {
+    toString: function(): string {
       if (!queryParams || queryParams.toString().length === 0) {
         return path;
       }
       const separator = path.includes('?') ? '&' : '?';
       return `${path}${separator}${queryParams.toString()}`;
+    },
+    [Symbol.toPrimitive](hint: 'string' | 'number' | 'default'): string {
+      // Automatically convert to string by calling toString()
+      return this.toString();
     }
   };
+
+  return result;
 }
 
 /**

@@ -200,4 +200,51 @@ describe('urlLiteral', () => {
       expect(url.toString()).toBe('/api/users/123?page=1');
     });
   });
+
+  describe('Symbol.toPrimitive - automatic string conversion', () => {
+    test('should automatically convert to string in template literals', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+      const result = `${url}`;
+      expect(result).toBe('/api/users/123?page=1');
+    });
+
+    test('should automatically convert to string when concatenated', () => {
+      const url = urlLiteral`/api/users`.query({ page: 1 });
+      const result = 'GET ' + url;
+      expect(result).toBe('GET /api/users?page=1');
+    });
+
+    test('should automatically convert to string with String()', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 });
+      const result = String(url);
+      expect(result).toBe('/api/users/123');
+    });
+
+    test('should automatically convert when used in string interpolation', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+      const message = `Fetching ${url}`;
+      expect(message).toBe('Fetching /api/users/123?page=1');
+    });
+
+    test('should automatically convert in string concatenation with empty string', () => {
+      const url = urlLiteral`/api/users`.query({ page: 1 });
+      const result = url + '';
+      expect(result).toBe('/api/users?page=1');
+    });
+
+    test('should work with params and query in automatic conversion', () => {
+      const url = urlLiteral`/api/users/:id/posts/:postId`
+        .params({ id: 123, postId: 456 })
+        .query({ page: 1, limit: 10 });
+      const result = `${url}`;
+      expect(result).toBe('/api/users/123/posts/456?page=1&limit=10');
+    });
+
+    test('toString() still works explicitly', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+      expect(url.toString()).toBe('/api/users/123?page=1');
+      // Both should work the same
+      expect(`${url}`).toBe(url.toString());
+    });
+  });
 });

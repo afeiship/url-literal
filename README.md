@@ -51,6 +51,20 @@ url6.toString(); // '/api/users/123?page=1'
 // Ignore null/undefined values
 const url7 = urlLiteral`/api/users`.query({ page: 1, search: null });
 url7.toString(); // '/api/users?page=1'
+
+// Automatic string conversion (no need to call toString())
+const url8 = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+const message = `Fetching ${url8}`; // 'Fetching /api/users/123?page=1'
+const fullUrl = 'GET ' + url8; // 'GET /api/users/123?page=1'
+fetch(url8); // Automatically converts to string
+
+// Works in template literals
+const url9 = urlLiteral`/api/users/:id`.params({ id: 123 });
+console.log(`${url9}`); // '/api/users/123'
+
+// String() also works
+const url10 = urlLiteral`/api/users`.query({ page: 1 });
+String(url10); // '/api/users?page=1'
 ```
 
 ## license
