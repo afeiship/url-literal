@@ -42,7 +42,10 @@ export interface UrlLiteralResult {
 /**
  * Type definition for the urlLiteral template literal tag function
  */
-export type UrlLiteralFunction = (strings: TemplateStringsArray, ...values: any[]) => UrlLiteralResult;
+export type UrlLiteralFunction = (
+  strings: TemplateStringsArray,
+  ...values: any[]
+) => UrlLiteralResult;
 
 /**
  * Alias for UrlLiteralFunction for easier import and usage
@@ -112,7 +115,7 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
  * @param values - Interpolated values
  * @returns An object with params(), query() and toString() methods
  */
-const urlLiteral: UrlLiteralFunction = (strings: TemplateStringsArray, ...values: any[]): UrlLiteralResult => {
+const urlLiteral: UrlLiteralFunction = (strings, ...values) => {
   let path = '';
   strings.forEach((str, i) => {
     path += str;
