@@ -1,4 +1,5 @@
 // https://chat.qwen.ai/c/0867dd83-9812-4915-b1d7-a4c9b14de208
+// https://chat.qwen.ai/c/d5455274-d538-41b2-94da-2f18de129c74
 
 export interface UrlLiteralResult {
   /**
@@ -6,13 +7,25 @@ export interface UrlLiteralResult {
    * @param params - An object containing path parameters to replace
    * @returns A new UrlLiteralResult instance with replaced path parameters
    */
-  params(params?: Record<string, any> | null): UrlLiteralResult;
+  param(params?: Record<string, any> | null): UrlLiteralResult;
   /**
    * Add query parameters to the URL path
    * @param params - An object containing query parameters. Null/undefined values will be ignored.
    * @returns A new UrlLiteralResult instance with query parameters
    */
   query(params?: Record<string, any> | null): UrlLiteralResult;
+  /**
+   * Add path parameters and return the final string directly
+   * @param params - An object containing path parameters to replace
+   * @returns The final URL string with path parameters replaced
+   */
+  paramString(params?: Record<string, any> | null): string;
+  /**
+   * Add query parameters and return the final string directly
+   * @param params - An object containing query parameters. Null/undefined values will be ignored.
+   * @returns The final URL string with query parameters added
+   */
+  queryString(params?: Record<string, any> | null): string;
   /**
    * Get the complete URL string directly as a property
    */
@@ -35,7 +48,7 @@ export interface UrlLiteralResult {
  */
 function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): UrlLiteralResult {
   const result: UrlLiteralResult = {
-    params: function(params?: Record<string, any> | null): UrlLiteralResult {
+    param: function (params?: Record<string, any> | null): UrlLiteralResult {
       if (!params || Object.keys(params).length === 0) {
         return createUrlLiteralResult(path, queryParams);
       }
@@ -51,7 +64,7 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
 
       return createUrlLiteralResult(replacedPath, queryParams);
     },
-    query: function(params?: Record<string, any> | null): UrlLiteralResult {
+    query: function (params?: Record<string, any> | null): UrlLiteralResult {
       if (!params || Object.keys(params).length === 0) {
         return createUrlLiteralResult(path, queryParams);
       }
@@ -65,10 +78,16 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
 
       return createUrlLiteralResult(path, searchParams);
     },
+    paramString: function (params?: Record<string, any> | null): string {
+      return this.param(params).toString();
+    },
+    queryString: function (params?: Record<string, any> | null): string {
+      return this.query(params).toString();
+    },
     get value(): string {
       return this.toString();
     },
-    toString: function(): string {
+    toString: function (): string {
       if (!queryParams || queryParams.toString().length === 0) {
         return path;
       }
