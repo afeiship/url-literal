@@ -52,39 +52,35 @@ url6.toString(); // '/api/users/123?page=1'
 const url7 = urlLiteral`/api/users`.withQuery({ page: 1, search: null });
 url7.toString(); // '/api/users?page=1'
 
-// Get URL string via value property (recommended)
-const url8 = urlLiteral`/admin/pages/users/:id`.withParam({ id: 1 }).withQuery({ q: 'xiaoming' });
-url8.value; // '/admin/pages/users/1?q=xiaoming'
-
 // Automatic string conversion (no need to call toString())
-const url9 = urlLiteral`/api/users/:id`.withParam({ id: 123 }).withQuery({ page: 1 });
-const message = `Fetching ${url9}`; // 'Fetching /api/users/123?page=1'
-const fullUrl = 'GET ' + url9; // 'GET /api/users/123?page=1'
-fetch(url9); // Automatically converts to string
+const url8 = urlLiteral`/api/users/:id`.withParam({ id: 123 }).withQuery({ page: 1 });
+const message = `Fetching ${url8}`; // 'Fetching /api/users/123?page=1'
+const fullUrl = 'GET ' + url8; // 'GET /api/users/123?page=1'
+fetch(url8); // Automatically converts to string
 
 // Works in template literals
-const url10 = urlLiteral`/api/users/:id`.withParam({ id: 123 });
-console.log(`${url10}`); // '/api/users/123'
+const url9 = urlLiteral`/api/users/:id`.withParam({ id: 123 });
+console.log(`${url9}`); // '/api/users/123'
 
 // String() also works
-const url11 = urlLiteral`/api/users`.withQuery({ page: 1 });
-String(url11); // '/api/users?page=1'
+const url10 = urlLiteral`/api/users`.withQuery({ page: 1 });
+String(url10); // '/api/users?page=1'
 
-// value property is equivalent to toString()
-const url12 = urlLiteral`/api/users/:id`.withParam({ id: 123 }).withQuery({ page: 1 });
-url12.value === url12.toString(); // true
+// toString() explicitly returns the URL string
+const url11 = urlLiteral`/api/users/:id`.withParam({ id: 123 }).withQuery({ page: 1 });
+url11.toString(); // '/api/users/123?page=1'
 
 // Replace path parameters and get string directly with param() (legacy)
-const url13 = urlLiteral`/api/users/:id`.param({ id: 123 });
-url13; // '/api/users/123' (returns plain string)
+const url12 = urlLiteral`/api/users/:id`.param({ id: 123 });
+url12; // '/api/users/123' (returns plain string)
 
 // Add query parameters and get string directly with query() (legacy)
-const url14 = urlLiteral`/api/users`.query({ page: 1, limit: 10 });
-url14; // '/api/users?page=1&limit=10' (returns plain string)
+const url13 = urlLiteral`/api/users`.query({ page: 1, limit: 10 });
+url13; // '/api/users?page=1&limit=10' (returns plain string)
 
 // Combine param() and query() for direct string output (legacy)
-const url15 = urlLiteral`/api/users/:id`.param({ id: 123 }).query({ page: 1 });
-url15; // '/api/users/123?page=1'
+const url14 = urlLiteral`/api/users/:id`.param({ id: 123 }).query({ page: 1 });
+url14; // '/api/users/123?page=1'
 ```
 
 ## license

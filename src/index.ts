@@ -27,10 +27,6 @@ export interface UrlLiteralResult {
    */
   query(params?: Record<string, any> | null): string;
   /**
-   * Get the complete URL string directly as a property
-   */
-  readonly value: string;
-  /**
    * Get the base path string without query parameters
    * @returns The base path string
    */
@@ -83,9 +79,6 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
     },
     query: function (params?: Record<string, any> | null): string {
       return this.withQuery(params).toString();
-    },
-    get value(): string {
-      return this.toString();
     },
     toString: function (): string {
       if (!queryParams || queryParams.toString().length === 0) {
