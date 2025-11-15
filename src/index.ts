@@ -1,5 +1,18 @@
 // https://chat.qwen.ai/c/0867dd83-9812-4915-b1d7-a4c9b14de208
 
+// Get inspect.custom for Node.js console.log support (browser-safe)
+let inspectCustom: symbol | undefined;
+try {
+  // Try to get inspect.custom from Node.js util module (only available in Node.js)
+  if (typeof require !== 'undefined') {
+    const util = require('util');
+    inspectCustom = util.inspect?.custom;
+  }
+} catch {
+  // Browser environment, inspect.custom not available
+  inspectCustom = undefined;
+}
+
 export interface UrlLiteralResult {
   /**
    * Replace path parameters (e.g., :id) with actual values
@@ -42,8 +55,8 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
           // Replace :paramName with the actual value
           const pattern = new RegExp(`:${key}(?=/|$|\\?)`, 'g');
           replacedPath = replacedPath.replace(pattern, String(value));
-        }
-      });
+    }
+  });
 
       return createUrlLiteralResult(replacedPath, queryParams);
     },
@@ -73,6 +86,14 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
       return this.toString();
     }
   };
+
+  // Add inspect.custom for Node.js console.log support (only in Node.js environment)
+  if (inspectCustom) {
+    result[inspectCustom] = function(): string {
+      // Customize console.log output to show the URL string
+      return this.toString();
+    };
+  }
 
   return result;
 }
