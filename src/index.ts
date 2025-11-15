@@ -40,6 +40,16 @@ export interface UrlLiteralResult {
 }
 
 /**
+ * Type definition for the urlLiteral template literal tag function
+ */
+export type UrlLiteralFunction = (strings: TemplateStringsArray, ...values: any[]) => UrlLiteralResult;
+
+/**
+ * Alias for UrlLiteralFunction for easier import and usage
+ */
+export type UrlLiteral = UrlLiteralFunction;
+
+/**
  * Creates a new UrlLiteralResult instance with the given path and optional query parameters
  */
 function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): UrlLiteralResult {
