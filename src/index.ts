@@ -110,10 +110,10 @@ function createUrlLiteralResult(path: string, queryParams?: URLSearchParams): Ur
 }
 
 /**
- * Template literal tag function for building safe, readable URLs
+ * Template literal tag function for building URLs with path and query parameters
  * @param strings - Template string parts
  * @param values - Interpolated values
- * @returns An object with params(), query() and toString() methods
+ * @returns UrlLiteralResult instance with methods: withParam, withQuery, param, query, toString
  */
 const urlLiteral: UrlLiteralFunction = (strings, ...values) => {
   let path = '';
