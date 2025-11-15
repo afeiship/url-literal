@@ -26,28 +26,31 @@ url2.toString(); // '/api/users/123'
 
 // Add query parameters
 const url3 = urlLiteral`/api/users`.query({ page: 1, limit: 10 });
-// '/api/users?page=1&limit=10'
+url3.toString(); // '/api/users?page=1&limit=10'
 
 // Combine variables and query parameters
 const url4 = urlLiteral`/api/users/${userId}/posts`.query({ page: 1 });
-// '/api/users/123/posts?page=1'
+url4.toString(); // '/api/users/123/posts?page=1'
 
 // Replace path parameters
 const path = urlLiteral`/api/users/:id`.params({ id: 123 });
-// '/api/users/123'
+path.toString(); // '/api/users/123'
 
 // Replace multiple path parameters
 const path2 = urlLiteral`/api/users/:userId/posts/:postId`.params({ userId: 123, postId: 456 });
-// '/api/users/123/posts/456'
+path2.toString(); // '/api/users/123/posts/456'
 
-// Combine path parameters and query parameters
-const pathWithParams = urlLiteral`/api/users/:id`.params({ id: 123 });
-const url5 = urlLiteral`${pathWithParams}`.query({ page: 1, limit: 10 });
-// '/api/users/123?page=1&limit=10'
+// Chain params and query (params first, then query)
+const url5 = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1, limit: 10 });
+url5.toString(); // '/api/users/123?page=1&limit=10'
+
+// Chain query and params (query first, then params)
+const url6 = urlLiteral`/api/users/:id`.query({ page: 1 }).params({ id: 123 });
+url6.toString(); // '/api/users/123?page=1'
 
 // Ignore null/undefined values
-const url6 = urlLiteral`/api/users`.query({ page: 1, search: null });
-// '/api/users?page=1'
+const url7 = urlLiteral`/api/users`.query({ page: 1, search: null });
+url7.toString(); // '/api/users?page=1'
 ```
 
 ## license
