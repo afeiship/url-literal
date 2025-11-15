@@ -26,7 +26,7 @@ const baseOptions: Options = {
 const umdOptions: Options = {
   entry: ['src/index.ts'],
   clean: false, // Don't clean to avoid race condition
-  format: ['umd'] as any,
+    format: ['umd'] as any,
   tsconfig: './tsconfig.json',
   sourcemap: true,
   banner: {
@@ -37,14 +37,14 @@ const umdOptions: Options = {
       js: `.${format}.js`,
     };
   },
-  esbuildPlugins: [
-    replace({
-      'export default': 'export =',
-    }),
-    umdWrapper({
-      libraryName: 'urlLiteral',
-    }),
-  ],
+    esbuildPlugins: [
+      replace({
+        'export default': 'export =',
+      }),
+      umdWrapper({
+        libraryName: 'urlLiteral',
+      }),
+    ],
 };
 
 export default defineConfig([

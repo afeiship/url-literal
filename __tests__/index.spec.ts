@@ -246,5 +246,13 @@ describe('urlLiteral', () => {
       // Both should work the same
       expect(`${url}`).toBe(url.toString());
     });
+
+    test('console.log should output string (util.inspect.custom)', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+      // In Node.js, util.inspect will use inspect.custom if available
+      const { inspect } = require('util');
+      const output = inspect(url);
+      expect(output).toBe('/api/users/123?page=1');
+    });
   });
 });
