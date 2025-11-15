@@ -22,21 +22,35 @@ const baseOptions: Options = {
   },
 };
 
+// UMD build configuration - separate to avoid sharing options object
+const umdOptions: Options = {
+  entry: ['src/index.ts'],
+  clean: false, // Don't clean to avoid race condition
+  format: ['umd'] as any,
+  tsconfig: './tsconfig.json',
+  sourcemap: true,
+  banner: {
+    js: tsupBanner(),
+  },
+  outExtension({ format }) {
+    return {
+      js: `.${format}.js`,
+    };
+  },
+  esbuildPlugins: [
+    replace({
+      'export default': 'export =',
+    }),
+    umdWrapper({
+      libraryName: 'urlLiteral',
+    }),
+  ],
+};
+
 export default defineConfig([
   {
     ...baseOptions,
     splitting: true,
   },
-  {
-    ...baseOptions,
-    format: ['umd'] as any,
-    esbuildPlugins: [
-      replace({
-        'export default': 'export =',
-      }),
-      umdWrapper({
-        libraryName: 'urlLiteral',
-      }),
-    ],
-  }
+  umdOptions
 ]);
