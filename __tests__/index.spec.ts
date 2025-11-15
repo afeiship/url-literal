@@ -106,6 +106,67 @@ describe('urlLiteral', () => {
     });
   });
 
+  describe('params method', () => {
+    test('should replace single path parameter', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 });
+      expect(url).toBe('/api/users/123');
+    });
+
+    test('should replace multiple path parameters', () => {
+      const url = urlLiteral`/api/users/:userId/posts/:postId`.params({ userId: 123, postId: 456 });
+      expect(url).toBe('/api/users/123/posts/456');
+    });
+
+    test('should handle empty object and return original path', () => {
+      const url = urlLiteral`/api/users/:id`.params({});
+      expect(url).toBe('/api/users/:id');
+    });
+
+    test('should handle null parameter and return original path', () => {
+      const url = urlLiteral`/api/users/:id`.params(null);
+      expect(url).toBe('/api/users/:id');
+    });
+
+    test('should handle undefined parameter and return original path', () => {
+      const url = urlLiteral`/api/users/:id`.params(undefined);
+      expect(url).toBe('/api/users/:id');
+    });
+
+    test('should ignore null/undefined values in params', () => {
+      const url = urlLiteral`/api/users/:id/posts/:postId`.params({ id: 123, postId: null });
+      expect(url).toBe('/api/users/123/posts/:postId');
+    });
+
+    test('should replace path parameters with string values', () => {
+      const url = urlLiteral`/api/categories/:category`.params({ category: 'tech' });
+      expect(url).toBe('/api/categories/tech');
+    });
+
+    test('should replace path parameters with numeric values', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 0 });
+      expect(url).toBe('/api/users/0');
+    });
+
+    test('should handle path parameters at the end of path', () => {
+      const url = urlLiteral`/api/users/:id`.params({ id: 123 });
+      expect(url).toBe('/api/users/123');
+    });
+
+    test('should handle path parameters in the middle of path', () => {
+      const url = urlLiteral`/api/users/:id/posts`.params({ id: 123 });
+      expect(url).toBe('/api/users/123/posts');
+    });
+
+    test('should work with query parameters', () => {
+      const pathWithParams = urlLiteral`/api/users/:id`.params({ id: 123 });
+      expect(pathWithParams).toBe('/api/users/123');
+      // To add query parameters, use URLSearchParams or manually append
+      const searchParams = new URLSearchParams({ page: '1', limit: '10' });
+      const url = `${pathWithParams}?${searchParams.toString()}`;
+      expect(url).toBe('/api/users/123?page=1&limit=10');
+    });
+  });
+
   describe('toString method', () => {
     test('should return basic path string', () => {
       const url = urlLiteral`/api/users/123`;
@@ -120,6 +181,16 @@ describe('urlLiteral', () => {
       expect(queryUrl).toBe('/api/users?page=1');
       // original object's toString still returns basic path
       expect(urlObj.toString()).toBe('/api/users');
+    });
+
+    test('toString should not be affected by params method', () => {
+      const urlObj = urlLiteral`/api/users/:id`;
+      expect(urlObj.toString()).toBe('/api/users/:id');
+      // params method returns string, doesn't affect original object's toString
+      const paramsUrl = urlObj.params({ id: 123 });
+      expect(paramsUrl).toBe('/api/users/123');
+      // original object's toString still returns original path
+      expect(urlObj.toString()).toBe('/api/users/:id');
     });
   });
 });

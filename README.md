@@ -32,8 +32,21 @@ const url3 = urlLiteral`/api/users`.query({ page: 1, limit: 10 });
 const url4 = urlLiteral`/api/users/${userId}/posts`.query({ page: 1 });
 // '/api/users/123/posts?page=1'
 
+// Replace path parameters
+const path = urlLiteral`/api/users/:id`.params({ id: 123 });
+// '/api/users/123'
+
+// Replace multiple path parameters
+const path2 = urlLiteral`/api/users/:userId/posts/:postId`.params({ userId: 123, postId: 456 });
+// '/api/users/123/posts/456'
+
+// Combine path parameters and query parameters
+const pathWithParams = urlLiteral`/api/users/:id`.params({ id: 123 });
+const url5 = urlLiteral`${pathWithParams}`.query({ page: 1, limit: 10 });
+// '/api/users/123?page=1&limit=10'
+
 // Ignore null/undefined values
-const url5 = urlLiteral`/api/users`.query({ page: 1, search: null });
+const url6 = urlLiteral`/api/users`.query({ page: 1, search: null });
 // '/api/users?page=1'
 ```
 
