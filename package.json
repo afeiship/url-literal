@@ -1,6 +1,6 @@
 {
   "name": "@jswork/url-literal",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A utility for building safe, readable URLs with template literals and query parameters.",
   "npmClient": "pnpm",
   "main": "dist/index.cjs.js",
