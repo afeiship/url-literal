@@ -52,19 +52,27 @@ url6.toString(); // '/api/users/123?page=1'
 const url7 = urlLiteral`/api/users`.query({ page: 1, search: null });
 url7.toString(); // '/api/users?page=1'
 
+// Get URL string via value property (recommended)
+const url8 = urlLiteral`/admin/pages/users/:id`.params({ id: 1 }).query({ q: 'xiaoming' });
+url8.value; // '/admin/pages/users/1?q=xiaoming'
+
 // Automatic string conversion (no need to call toString())
-const url8 = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
-const message = `Fetching ${url8}`; // 'Fetching /api/users/123?page=1'
-const fullUrl = 'GET ' + url8; // 'GET /api/users/123?page=1'
-fetch(url8); // Automatically converts to string
+const url9 = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+const message = `Fetching ${url9}`; // 'Fetching /api/users/123?page=1'
+const fullUrl = 'GET ' + url9; // 'GET /api/users/123?page=1'
+fetch(url9); // Automatically converts to string
 
 // Works in template literals
-const url9 = urlLiteral`/api/users/:id`.params({ id: 123 });
-console.log(`${url9}`); // '/api/users/123'
+const url10 = urlLiteral`/api/users/:id`.params({ id: 123 });
+console.log(`${url10}`); // '/api/users/123'
 
 // String() also works
-const url10 = urlLiteral`/api/users`.query({ page: 1 });
-String(url10); // '/api/users?page=1'
+const url11 = urlLiteral`/api/users`.query({ page: 1 });
+String(url11); // '/api/users?page=1'
+
+// value property is equivalent to toString()
+const url12 = urlLiteral`/api/users/:id`.params({ id: 123 }).query({ page: 1 });
+url12.value === url12.toString(); // true
 ```
 
 ## license
